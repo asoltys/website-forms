@@ -15,11 +15,12 @@ async function updateAirtableCache() {
       function page(records, fetchNextPage) {
         records.forEach(function(record) {
           const geocodeCache = record.get("Geocode Cache");
+          const active = record.get("Active");
           if (geocodeCache) {
             const geocode = JSON.parse(
               Buffer.from(geocodeCache.substring(2), "base64").toString("utf8")
             );
-            nodes.push({ lat: geocode.o.lat, lng: geocode.o.lng });
+            nodes.push({ lat: geocode.o.lat, lng: geocode.o.lng, active });
           }
         });
 
