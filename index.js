@@ -11,5 +11,5 @@ function updateAirtableCache() {
 setInterval(updateAirtableCache, 1000);
 
 express()
-  .get("/", (req, res) => res.send(airtableCache.currentTime))
+  .get("/", (req, res) => res.send(airtableCache.currentTime + ""))
   .listen(PORT, () => console.log(`Listening on ${PORT}`));
