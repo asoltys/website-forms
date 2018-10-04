@@ -5,11 +5,13 @@ const PORT = process.env.PORT || 5000;
 const fetch = require("node-fetch");
 const base = require("airtable").base("appcgeWHNPAmxp88S");
 const bodyParser = require("body-parser");
+const expressSanitized = require("express-sanitize-escape");
 
 const airtableCache = {};
 
-const postToAirtable = (type, redirect) => (req, res) => {
+const postToAirtable = type => (req, res) => {
   console.log("req", req.body);
+  const redirect = typeof req.query.r === "string" ? req.query.r : false;
   base("Combined").create(
     {
       Name: req.body.name || "",
@@ -29,7 +31,9 @@ const postToAirtable = (type, redirect) => (req, res) => {
       }
     }
   );
-  res.redirect(redirect);
+  if (redirect) {
+    res.redirect(redirect);
+  }
 };
 
 async function updateAirtableCache() {
@@ -64,6 +68,7 @@ async function updateAirtableCache() {
 // setInterval(updateAirtableCache, 1000);
 
 express()
+  .use(expressSanitized())
   .use(cors())
   .use(bodyParser.urlencoded({ extended: true }))
   .get("/nodes", (req, res) => res.send(JSON.stringify(airtableCache.nodes)))
