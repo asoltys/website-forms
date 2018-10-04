@@ -13,14 +13,14 @@ const postToAirtable = type => (req, res) => {
   const redirect = typeof req.query.r === "string" ? req.query.r : false;
   base("Combined").create(
     {
-      Name: req.body.name || "",
-      Email: req.body.email || "",
-      Address: req.body.address || "",
-      Message: req.body.message || "",
+      Name: req.body.Name || "",
+      Email: req.body.Email || "",
+      Address: req.body.Address || "",
+      Message: req.body.Message || "",
       Type: type,
-      Newsletter: req.body.newsletter === "",
-      Notify: req.body.notify === "",
-      Honnl3P0t: req.body.honnl3P0t || "",
+      Newsletter: req.body.Newsletter === "",
+      Notify: req.body.Notify === "",
+      Honnl3P0t: req.body.Honnl3P0t || "",
       IP: req.ip
     },
     function(err) {
