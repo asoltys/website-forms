@@ -8,14 +8,27 @@ const bodyParser = require("body-parser");
 
 const airtableCache = {};
 
-const postToAirtable = (baseName, redirect) => (req, res) => {
+const postToAirtable = (type, redirect) => (req, res) => {
   console.log("req", req.body);
-  base(baseName).create({ ...req.body, IP: req.ip }, function(err) {
-    if (err) {
-      console.error(err);
-      return;
+  base("Combined").create(
+    {
+      Name: req.body.name || "",
+      Email: req.body.email || "",
+      Address: req.body.address || "",
+      Message: req.body.message || "",
+      Type: type,
+      Newsletter: req.body.newsletter === "",
+      Notify: req.body.notify === "",
+      Honnl3P0t: req.body.honnl3P0t || "",
+      IP: req.ip
+    },
+    function(err) {
+      if (err) {
+        console.error(err);
+        return;
+      }
     }
-  });
+  );
   res.redirect(redirect);
 };
 
@@ -54,5 +67,20 @@ express()
   .use(cors())
   .use(bodyParser.urlencoded({ extended: true }))
   .get("/nodes", (req, res) => res.send(JSON.stringify(airtableCache.nodes)))
-  .post("/organizer-submit-eyJpIj", postToAirtable("Organizers", "back"))
+  .post(
+    "/organizer-submit-eyJpIj",
+    postToAirtable("Organizer", "https://althea.org/thanks-organizer")
+  )
+  .post(
+    "/user-submit-eyJpIj",
+    postToAirtable("User", "https://althea.org/thanks-user")
+  )
+  .post(
+    "/developer-submit-eyJpIj",
+    postToAirtable("Developer", "https://althea.org/thanks-developer")
+  )
+  .post(
+    "/other-submit-eyJpIj",
+    postToAirtable("Other", "https://althea.org/thanks-other")
+  )
   .listen(PORT, () => console.log(`Listening on ${PORT}`));
