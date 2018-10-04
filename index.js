@@ -10,7 +10,6 @@ const expressSanitized = require("express-sanitize-escape");
 const airtableCache = {};
 
 const postToAirtable = type => (req, res) => {
-  console.log("req", req.body);
   const redirect = typeof req.query.r === "string" ? req.query.r : false;
   base("Combined").create(
     {
@@ -68,9 +67,9 @@ async function updateAirtableCache() {
 // setInterval(updateAirtableCache, 1000);
 
 express()
-  .use(expressSanitized())
   .use(cors())
   .use(bodyParser.urlencoded({ extended: true }))
+  .use(expressSanitized.middleware())
   .get("/nodes", (req, res) => res.send(JSON.stringify(airtableCache.nodes)))
   .post(
     "/organizer-submit-eyJpIj",
