@@ -66,8 +66,13 @@ async function updateAirtableCache() {
 
 // setInterval(updateAirtableCache, 1000);
 
+var corsOptions = {
+  origin: 'http://althea.org',
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+}
+
 express()
-  .use(cors())
+  .use(cors(corsOptions))
   .use(bodyParser.urlencoded({ extended: true }))
   .use(expressSanitized.middleware())
   .get("/nodes", (req, res) => res.send(JSON.stringify(airtableCache.nodes)))
