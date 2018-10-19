@@ -67,7 +67,7 @@ async function updateAirtableCache() {
 // setInterval(updateAirtableCache, 1000);
 
 var corsOptions = {
-  origin: 'http://althea.org',
+  origin: 'https://althea.org',
   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
 
